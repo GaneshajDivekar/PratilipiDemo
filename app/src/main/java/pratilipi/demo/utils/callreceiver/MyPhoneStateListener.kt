@@ -6,6 +6,7 @@ import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.work.*
 import pratilipi.demo.database.CustomerListEntity
+import pratilipi.demo.interfaces.ITelephony
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,6 +20,8 @@ class MyPhoneStateListener : PhoneStateListener() {
             return
         }
         when (state) {
+
+
             TelephonyManager.CALL_STATE_RINGING -> {
                 isIncoming = true
                 callStartTime = Date()
@@ -48,6 +51,7 @@ class MyPhoneStateListener : PhoneStateListener() {
         private var lastState = TelephonyManager.CALL_STATE_IDLE
         private var callStartTime: Date? = null
         private var isIncoming = false
+
     }
 
 
