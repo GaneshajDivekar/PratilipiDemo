@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -13,62 +14,90 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_8sdp"
-
         app:cardCornerRadius="@dimen/_4sdp">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtId"
-                android:layout_width="0dp"
+            <RelativeLayout
+                android:id="@+id/view_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_row_background">
+
+                <ImageView
+                    android:id="@+id/delete_icon"
+                    android:layout_width="@dimen/ic_delete"
+                    android:layout_height="@dimen/ic_delete"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/padd_10"
+                    android:src="@drawable/ic_android_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/padd_10"
+                    android:layout_toLeftOf="@id/delete_icon"
+                    android:text="@string/delete"
+                    android:textColor="#fff"
+                    android:textSize="13dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/view_foreground"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@={contactdb.customer_name}"
-                android:textColor="#123456"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@android:color/white"
+                android:padding="@dimen/padd_10">
 
-            <TextView
-                android:id="@+id/txtTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@={contactdb.customer_mobile}"
-                android:textAllCaps="true"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtId" />
+                <ImageView
+                    android:id="@+id/thumbnail"
+                    android:src="@drawable/ic_baseline_supervised_user_circle_24"
+                    android:layout_width="@dimen/thumbnail"
+                    android:layout_height="@dimen/thumbnail"
+                    android:layout_marginRight="@dimen/activity_padding_horizontal"
+                    android:scaleType="centerCrop" />
 
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:ellipsize="end"
+                    android:text="@={contactdb.customer_name}"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:textColor="@color/item_name"
+                    android:textSize="17dp" />
 
-            <TextView
-                android:id="@+id/txtDesc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@={contactdb.call_date}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name"
+                    android:text="@={contactdb.customer_mobile}"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:textColor="@color/description"
+                    android:textSize="12dp" />
 
+                <CheckBox
+                    android:id="@+id/block"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="Block"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+            </RelativeLayout>
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
 
 </layout>

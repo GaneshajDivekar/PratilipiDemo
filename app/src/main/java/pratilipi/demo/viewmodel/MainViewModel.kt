@@ -11,7 +11,7 @@ import pratilipi.demo.respository.MainRepository
 class MainViewModel @ViewModelInject constructor(private val mainRepository: MainRepository) : ViewModel() {
 
 
-  fun insertPost(customerListEntity: ArrayList<CustomerListEntity>) {
+  fun insertPost(customerListEntity: CustomerListEntity) {
         mainRepository.insertData(customerListEntity)
     }
 
@@ -19,4 +19,9 @@ class MainViewModel @ViewModelInject constructor(private val mainRepository: Mai
     return mainRepository.getContactData()
   }
 
+
+  fun updateStatus(dialerUniqueId: Int, status: Boolean)
+  {
+    return mainRepository.updateStatus(dialerUniqueId,status)
+  }
 }

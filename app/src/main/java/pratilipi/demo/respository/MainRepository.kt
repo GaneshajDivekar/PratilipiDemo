@@ -6,15 +6,20 @@ import pratilipi.demo.db.PratilipiDao
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
-    private val pratilipiDao: PratilipiDao
+     val pratilipiDao: PratilipiDao
 ) {
 
-    fun insertData(customerListEntity: ArrayList<CustomerListEntity>) {
+    fun insertData(customerListEntity:CustomerListEntity) {
         pratilipiDao.insertData(customerListEntity)
     }
 
     fun getContactData(): LiveData<List<CustomerListEntity>> {
         return pratilipiDao.getContact()
+    }
+
+
+    fun updateStatus(dialerUniqueId: Int, status: Boolean) {
+        pratilipiDao.updateStatus(dialerUniqueId, status)
     }
 
 

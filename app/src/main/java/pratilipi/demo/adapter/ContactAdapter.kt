@@ -3,6 +3,7 @@ package pratilipi.demo.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import pratilipi.demo.database.CustomerListEntity
 import pratilipi.demo.databinding.ContactLayoutBinding
@@ -29,20 +30,42 @@ class ContactAdapter(
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val currentUser = allPosts!![position]
-        holder.binding.contactdb = currentUser
-        holder.binding.executePendingBindings()
 
-        holder.itemView.setOnClickListener {
+        holder.binding.block.setChecked(allPosts.get(position).call_status)
+
+        holder.binding.block.setOnClickListener {
+            if (holder.binding.block.isChecked()) {
+                holder.binding.block.setChecked(false);
+                holder.binding.block.setChecked(allPosts.get(position).call_status)
+            } else {
+                holder.binding.block.setChecked(allPosts.get(position).call_status)
+                holder.binding.block.setChecked(true);
+            }
             itemClickEvent.onClick(allPosts.get(position))
         }
 
+        holder.binding.contactdb = currentUser
+        holder.binding.executePendingBindings()
+
     }
 
-    class RecyclerViewHolder(val binding: ContactLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+    class RecyclerViewHolder(val binding: ContactLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
-        val binding = ContactLayoutBinding.inflate(LayoutInflater.from(parent?.context), parent, false)
+        val binding =
+            ContactLayoutBinding.inflate(LayoutInflater.from(parent?.context), parent, false)
         return RecyclerViewHolder(binding)
+    }
+
+    fun removeItem(adapterPosition: Int) {
+        allPosts.drop(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+    }
+
+    fun updateList(displayContact: List<CustomerListEntity>) {
+        allPosts = displayContact
+        notifyDataSetChanged()
     }
 
 }
