@@ -8,6 +8,7 @@ import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -50,9 +51,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
 
     private fun initView() {
         itemClick = this@MainActivity
-
         if (checkPermission()) {
-
             layoutManager = LinearLayoutManager(this)
             mViewModel.getContact().observe(this, Observer {
                 if (it.size == 0) {
@@ -65,7 +64,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
                     ContactAdapter(this, displayContact, displayContact, itemClick as MainActivity)
                 mViewBinding.rcView.setLayoutManager(layoutManager)
                 mViewBinding.rcView.setAdapter(contactAdapter)
-
+                mViewBinding.pBar.setVisibility(GONE);
             })
 
         } else {
