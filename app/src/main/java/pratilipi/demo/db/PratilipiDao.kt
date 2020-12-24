@@ -12,7 +12,7 @@ import pratilipi.demo.database.CustomerListEntity
 @Dao
 interface PratilipiDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun insertData(customerListEntity: CustomerListEntity)
 
     @Update

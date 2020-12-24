@@ -13,6 +13,7 @@ import pratilipi.demo.base.BaseActivity
 import pratilipi.demo.database.CustomerListEntity
 import pratilipi.demo.databinding.ActivityAddContactBinding
 import pratilipi.demo.databinding.ActivityMainBinding
+import pratilipi.demo.utils.ExitActivity
 import pratilipi.demo.viewmodel.MainViewModel
 import java.io.File
 
@@ -38,7 +39,9 @@ class AddContactActivity : BaseActivity<MainViewModel, ActivityAddContactBinding
                 customerListEntity.customer_name=mViewBinding.username.text.toString()
                 customerListEntity.customer_mobile=mViewBinding.mobile.text.toString()
                 mViewModel.insertPost(customerListEntity)
-                finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                //finish()
             }
         }
     }
