@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.google.android.gms.common.Feature
 import dagger.Binds
 import dagger.Module
@@ -17,14 +18,16 @@ interface PratilipiDao {
     @Insert
     fun insertData(customerListEntity: CustomerListEntity)
 
+    @Update
+    fun updateStatusObject(customerListEntity: CustomerListEntity)
+
     @Query("SELECT * FROM customer_table")
     fun getContact(): LiveData<List<CustomerListEntity>>
 
     @Query("SELECT * FROM customer_table WHERE customer_mobile=:phoneNumber")
     fun getContacts(phoneNumber: String): CustomerListEntity
 
-    @Query("Update customer_table   SET  call_status =:status  WHERE  pratilipi_unique_id =:dialerUniqueId")
-    fun updateStatus(dialerUniqueId: Int, status: Boolean)
-
+    @Query("Update customer_table   SET  call_status =:status  WHERE  customer_mobile =:dialerUniqueId")
+    fun updateStatus(dialerUniqueId: String, status: String)
 
 }

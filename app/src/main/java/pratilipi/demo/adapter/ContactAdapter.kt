@@ -3,7 +3,7 @@ package pratilipi.demo.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import pratilipi.demo.database.CustomerListEntity
 import pratilipi.demo.databinding.ContactLayoutBinding
@@ -31,19 +31,21 @@ class ContactAdapter(
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val currentUser = allPosts!![position]
 
-        holder.binding.block.setChecked(allPosts.get(position).call_status)
-
-        holder.binding.block.setOnClickListener {
-            if (holder.binding.block.isChecked()) {
-                holder.binding.block.setChecked(false);
-                holder.binding.block.setChecked(allPosts.get(position).call_status)
-            } else {
-                holder.binding.block.setChecked(allPosts.get(position).call_status)
-                holder.binding.block.setChecked(true);
-            }
-            itemClickEvent.onClick(allPosts.get(position))
+        if (currentUser.call_status.equals("0")) {
+            holder.binding.block.setChecked(false)
+        } else {
+            holder.binding.block.setChecked(true)
         }
-
+        holder.binding.block.setOnClickListener {
+            if (holder.binding.block.isChecked) {
+                holder.binding.block.setChecked(true)
+           //     currentUser.call_status="1"
+            } else {
+                holder.binding.block.setChecked(false)
+             //   currentUser.call_status="0"
+            }
+            itemClickEvent.onClick(allPosts.get(position),position)
+        }
         holder.binding.contactdb = currentUser
         holder.binding.executePendingBindings()
 

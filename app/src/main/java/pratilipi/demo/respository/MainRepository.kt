@@ -18,8 +18,12 @@ class MainRepository @Inject constructor(
     }
 
 
-    fun updateStatus(dialerUniqueId: Int, status: Boolean) {
+    fun updateStatus(dialerUniqueId: String, status: String) {
         pratilipiDao.updateStatus(dialerUniqueId, status)
+    }
+
+    fun updateStatusObject(customerListEntity: CustomerListEntity) {
+        pratilipiDao.updateStatusObject(customerListEntity)
     }
 
 

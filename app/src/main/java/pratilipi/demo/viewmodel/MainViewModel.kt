@@ -2,7 +2,6 @@ package pratilipi.demo.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pratilipi.demo.database.CustomerListEntity
 import pratilipi.demo.respository.MainRepository
@@ -20,8 +19,12 @@ class MainViewModel @ViewModelInject constructor(private val mainRepository: Mai
   }
 
 
-  fun updateStatus(dialerUniqueId: Int, status: Boolean)
+  fun updateStatus(dialerUniqueId: String, status: String)
   {
     return mainRepository.updateStatus(dialerUniqueId,status)
+  }
+  fun updateStatusObject(customerListEntity: CustomerListEntity)
+  {
+    return mainRepository.updateStatusObject(customerListEntity)
   }
 }

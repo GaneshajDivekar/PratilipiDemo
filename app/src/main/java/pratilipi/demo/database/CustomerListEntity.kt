@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "customer_table")
 class CustomerListEntity() {
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "pratilipi_unique_id")
     var dialer_unique_id: Int = 0
@@ -19,13 +20,13 @@ class CustomerListEntity() {
     var customer_name: String = ""
 
     @ColumnInfo(name = "call_status")
-    var call_status: Boolean = false
+    var call_status: String = "0"
 
     @ColumnInfo(name = "call_duration")
     var call_duration: String = ""
 
     @ColumnInfo(name = "online")
-    var has_online: String = ""
+    var has_online: String = "0"
 
     @ColumnInfo(name = "call_start_time")
     var call_start_time: String = ""

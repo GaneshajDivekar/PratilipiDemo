@@ -1,16 +1,11 @@
 package pratilipi.demo
 
 import android.Manifest
-import android.content.ClipData.Item
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.CallLog
 import android.provider.ContactsContract
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -19,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityScoped
 import pratilipi.demo.adapter.ContactAdapter
@@ -30,9 +24,6 @@ import pratilipi.demo.databinding.ActivityMainBinding
 import pratilipi.demo.interfaces.ItemClick
 import pratilipi.demo.ui.AddContactActivity
 import pratilipi.demo.viewmodel.MainViewModel
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 
 
@@ -41,6 +32,8 @@ import kotlin.collections.ArrayList
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemClick,
     RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
+    var layoutManager: RecyclerView.LayoutManager? = null
+    var positions = 0
     var contactAdapter: ContactAdapter? = null
     var itemClick: ItemClick? = null
     private val PERMISSION_REQUEST_CODE = 200
@@ -59,13 +52,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
         if (checkPermission()) {
             //getAllContacts(this@MainActivity)
             getAllsContacts(this@MainActivity)
-
+            layoutManager = LinearLayoutManager(this)
             mViewModel.getContact().observe(this, Observer {
                 displayContact = it
                 contactAdapter =
                     ContactAdapter(this, displayContact, itemClick as MainActivity)
-                mViewBinding.rcView.setLayoutManager(LinearLayoutManager(this))
+                mViewBinding.rcView.setLayoutManager(layoutManager)
                 mViewBinding.rcView.setAdapter(contactAdapter)
+//                layoutManager!!.scrollToPosition(positions)
             })
         } else {
             requestPermission()
@@ -136,8 +130,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
             applicationContext,
             Manifest.permission.READ_PHONE_STATE
         )
+        val result7 = ContextCompat.checkSelfPermission(
+            applicationContext,
+            Manifest.permission.ANSWER_PHONE_CALLS
+        )
         return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
-                && result2 == PackageManager.PERMISSION_GRANTED && result3 == PackageManager.PERMISSION_GRANTED && result4 == PackageManager.PERMISSION_GRANTED && result5 == PackageManager.PERMISSION_GRANTED && result6 == PackageManager.PERMISSION_GRANTED
+                && result2 == PackageManager.PERMISSION_GRANTED && result3 == PackageManager.PERMISSION_GRANTED && result4 == PackageManager.PERMISSION_GRANTED && result5 == PackageManager.PERMISSION_GRANTED && result6 == PackageManager.PERMISSION_GRANTED && result7 == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermission() {
@@ -150,7 +148,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.WRITE_CALL_LOG,
                 Manifest.permission.READ_CALL_LOG,
-                Manifest.permission.READ_PHONE_STATE
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.ANSWER_PHONE_CALLS
             ),
             PERMISSION_REQUEST_CODE
         )
@@ -173,6 +172,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
                 val writeCallLogAccepted = grantResults[5] == PackageManager.PERMISSION_GRANTED
                 val writeReadPhoneStateAccepted =
                     grantResults[6] == PackageManager.PERMISSION_GRANTED
+                val answerCallPhoneStateAccepted =
+                    grantResults[7] == PackageManager.PERMISSION_GRANTED
 
                 if (writeContactAccepted && readContactAccepted) {
                     getAllsContacts(this@MainActivity)
@@ -203,14 +204,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
 
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
-    override fun onClick(customerListEntity: CustomerListEntity) {
-        if (customerListEntity.call_status) {
-            mViewModel.updateStatus(customerListEntity.dialer_unique_id, false)
+    override fun onClick(customerListEntity: CustomerListEntity, pos: Int) {
+        positions = pos
+        if (customerListEntity.call_status.equals("0")) {
+            mViewModel.updateStatus(customerListEntity.customer_mobile, "1")
         } else {
-            mViewModel.updateStatus(customerListEntity.dialer_unique_id, true)
+            mViewModel.updateStatus(customerListEntity.customer_mobile, "0")
         }
 
-        //contactAdapter?.updateList(displayContact)
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int, position: Int) {

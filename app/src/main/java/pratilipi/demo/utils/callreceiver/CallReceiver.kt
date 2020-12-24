@@ -1,16 +1,21 @@
 package pratilipi.demo.utils
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
+import android.telecom.TelecomManager
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import dagger.hilt.android.AndroidEntryPoint
 import pratilipi.demo.db.PratilipiDao
-import pratilipi.demo.interfaces.ITelephony
 import pratilipi.demo.utils.callreceiver.HiltBroadcastReceiver
+import pratilipi.demo.utils.callreceiver.MyPhoneStateListener
 import javax.inject.Inject
 
 
@@ -24,9 +29,10 @@ public class CallReceiver : HiltBroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         val telephony = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
         val customPhoneListener = MyPhoneStateListener()
         telephony.listen(customPhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
-        val telephonyService: ITelephony
+
         val bundle = intent.extras
         val phone_number = bundle!!.getString("incoming_number")
         val stateStr = intent.extras!!.getString(TelephonyManager.EXTRA_STATE)
@@ -45,22 +51,20 @@ public class CallReceiver : HiltBroadcastReceiver() {
 
 
         var customerListEntity = pratilipiDao.getContacts(phone_number)
-        if (customerListEntity.customer_mobile != null && customerListEntity.call_status==false) {
-            val telephonyService: ITelephony
-            val telephony =
-                context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-
+        if (customerListEntity.customer_mobile != null && customerListEntity.call_status.equals("1")) {
             try {
-                val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
-                val incomingNumber =
-                    intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                val c = Class.forName(telephony.javaClass.name)
-                val m = c.getDeclaredMethod("getITelephony")
-                m.isAccessible = true
-                telephonyService = m.invoke(telephony) as ITelephony
-                telephonyService.endCall()
+                val telecomManager =
+                    context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+                telecomManager.endCall()
+
+                Toast.makeText(
+                    context,
+                    "Blocked Phone Number thats why call Rejected $phone_number",
+                    Toast.LENGTH_LONG
+                ).show()
             } catch (e: Exception) {
                 e.printStackTrace()
+                Log.d("unable", "msg cant dissconect call....")
             }
         } else {
 
@@ -70,4 +74,5 @@ public class CallReceiver : HiltBroadcastReceiver() {
         customPhoneListener.onCallStateChanged(context, state, phone_number)
         Toast.makeText(context, "Phone Number $phone_number", Toast.LENGTH_SHORT).show()
     }
+
 }
