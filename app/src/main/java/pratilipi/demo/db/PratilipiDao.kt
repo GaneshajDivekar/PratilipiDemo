@@ -12,13 +12,13 @@ import pratilipi.demo.database.CustomerListEntity
 @Dao
 interface PratilipiDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertData(customerListEntity: CustomerListEntity)
 
     @Update
     fun updateStatusObject(customerListEntity: CustomerListEntity)
 
-    @Query("SELECT * FROM customer_table")
+    @Query("SELECT * FROM customer_table  ORDER BY customer_name ASC")
     fun getContact(): LiveData<List<CustomerListEntity>>
 
     @Query("SELECT * FROM customer_table WHERE customer_mobile=:phoneNumber")

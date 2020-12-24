@@ -52,17 +52,22 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
         itemClick = this@MainActivity
 
         if (checkPermission()) {
-            //getAllContacts(this@MainActivity)
-            getAllsContacts(this@MainActivity)
+
             layoutManager = LinearLayoutManager(this)
             mViewModel.getContact().observe(this, Observer {
+                if (it.size == 0) {
+                    getAllsContacts(this@MainActivity)
+                } else {
+
+                }
                 displayContact = it
                 contactAdapter =
-                    ContactAdapter(this, displayContact,displayContact, itemClick as MainActivity)
+                    ContactAdapter(this, displayContact, displayContact, itemClick as MainActivity)
                 mViewBinding.rcView.setLayoutManager(layoutManager)
                 mViewBinding.rcView.setAdapter(contactAdapter)
-//                layoutManager!!.scrollToPosition(positions)
+
             })
+
         } else {
             requestPermission()
         }
@@ -200,7 +205,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
                     getAllsContacts(this@MainActivity)
                     mViewModel.getContact().observe(this, Observer {
                         contactAdapter =
-                            ContactAdapter(this, it,it, itemClick as MainActivity)
+                            ContactAdapter(this, it, it, itemClick as MainActivity)
                         mViewBinding.rcView.setLayoutManager(LinearLayoutManager(this))
                         mViewBinding.rcView.setAdapter(contactAdapter)
                     })
