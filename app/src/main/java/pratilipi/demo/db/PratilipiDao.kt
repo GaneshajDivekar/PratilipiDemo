@@ -1,10 +1,7 @@
 package pratilipi.demo.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.google.android.gms.common.Feature
 import dagger.Binds
 import dagger.Module
@@ -15,7 +12,7 @@ import pratilipi.demo.database.CustomerListEntity
 @Dao
 interface PratilipiDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertData(customerListEntity: CustomerListEntity)
 
     @Update

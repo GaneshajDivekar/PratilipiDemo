@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -56,7 +58,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
             mViewModel.getContact().observe(this, Observer {
                 displayContact = it
                 contactAdapter =
-                    ContactAdapter(this, displayContact, itemClick as MainActivity)
+                    ContactAdapter(this, displayContact,displayContact, itemClick as MainActivity)
                 mViewBinding.rcView.setLayoutManager(layoutManager)
                 mViewBinding.rcView.setAdapter(contactAdapter)
 //                layoutManager!!.scrollToPosition(positions)
@@ -72,6 +74,25 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
             startActivity(intent)
             finish()
         }
+
+
+
+        mViewBinding?.searchEdittext?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val string = s.toString()
+                if (contactAdapter != null) {
+                    contactAdapter!!.filter.filter(string)
+                }
+            }
+        })
     }
 
     private fun getAllsContacts(mainActivity: MainActivity) {
@@ -179,7 +200,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), ItemCli
                     getAllsContacts(this@MainActivity)
                     mViewModel.getContact().observe(this, Observer {
                         contactAdapter =
-                            ContactAdapter(this, it, itemClick as MainActivity)
+                            ContactAdapter(this, it,it, itemClick as MainActivity)
                         mViewBinding.rcView.setLayoutManager(LinearLayoutManager(this))
                         mViewBinding.rcView.setAdapter(contactAdapter)
                     })

@@ -38,8 +38,7 @@ class AddContactActivity : BaseActivity<MainViewModel, ActivityAddContactBinding
                 customerListEntity.customer_name=mViewBinding.username.text.toString()
                 customerListEntity.customer_mobile=mViewBinding.mobile.text.toString()
                 mViewModel.insertPost(customerListEntity)
-                val intent = Intent(this@AddContactActivity,MainActivity::class.java)
-                startActivity(intent)
+                finish()
             }
         }
     }
